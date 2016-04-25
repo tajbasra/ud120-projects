@@ -71,6 +71,9 @@ n_components = 150
 print "Extracting the top %d eigenfaces from %d faces" % (n_components, X_train.shape[0])
 t0 = time()
 pca = RandomizedPCA(n_components=n_components, whiten=True).fit(X_train)
+print "Variance explained by principal component"
+print "Component 1", pca.explained_variance_ratio_[0]
+print "Component 2", pca.explained_variance_ratio_[1]
 print "done in %0.3fs" % (time() - t0)
 
 eigenfaces = pca.components_.reshape((n_components, h, w))
@@ -92,7 +95,7 @@ param_grid = {
           'gamma': [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.1],
           }
 # for sklearn version 0.16 or prior, the class_weight parameter value is 'auto'
-clf = GridSearchCV(SVC(kernel='rbf', class_weight='balanced'), param_grid)
+clf = GridSearchCV(SVC(kernel='rbf', class_weight='auto'), param_grid)
 clf = clf.fit(X_train_pca, y_train)
 print "done in %0.3fs" % (time() - t0)
 print "Best estimator found by grid search:"
